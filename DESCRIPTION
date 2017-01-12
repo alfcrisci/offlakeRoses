@@ -1,0 +1,20 @@
+Package: offlakeRoses
+Title: Builds JPEG Map of Dust Roses at Offlake TEOM Stations
+Version: 0.0.0.9000
+Authors@R: person("John", "Bannister", email = "jbannister@airsci.com", role = c("aut", "cre"))
+Description: Builds a map of dust roses at offlake TEOM sites and saves as a
+    JPEG. For attachment to automatically generated deviation letter for exceedence
+    days.
+License: file LICENSE
+Depends:
+    R (>= 3.3.2)
+LazyData: true
+Imports:
+    ggplot2,
+    RPostgreSQL,
+    rgdal,
+    RColorBrewer,
+    dplyr,
+    grid,
+    png
+RoxygenNote: 5.0.1
