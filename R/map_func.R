@@ -31,6 +31,7 @@ shoreline_roses <- function(day=Sys.Date()-1, path=tempdir()){
                                    function(x) ifelse(x>150, T, F))
     daily_summary$flag.color <- ifelse(daily_summary$exceed, "red", "black")
 
+    valueseq <- c(10, 50, 100, 150)
     legend.plot <- mfile_df %>% filter(deployment==mfile_df$deployment[1]) %>%
         plot_rose(., value='teom', dir='dir', valueseq=valueseq,
                   legend.title=bquote('P'*M[10]~'('*mu*'g/'*m^3*')'))
@@ -43,7 +44,6 @@ shoreline_roses <- function(day=Sys.Date()-1, path=tempdir()){
     info <- ggplot_build(p1)
     xrange <- info[[2]]$panel_ranges[[1]]$x.range
     yrange <- info[[2]]$panel_ranges[[1]]$y.range
-    valueseq <- c(10, 50, 100, 150)
     p2 <- p1 + 
         xlim(xrange[1] - 1000, xrange[2] + 1000) +
         ylim(yrange[1] - 1000, yrange[2] + 1000) +
@@ -98,11 +98,15 @@ geom_label(data=label_data, mapping=aes(x=x, y=y, label=daily.pm10),
 }
 
 p4 <- p3 +
-    ggtitle(substitute(atop(paste("Hourly P",  M[10], " Roses for ", d), 
-                            paste("Site Label = 24-hour P", M[10])),  
-                       list(d=format(as.Date(day), "%m-%d-%Y"))))
-fl <- paste0(path, "/", format(as.Date(day), "%m-%d-%Y"), "_shoreline.jpg")
-jpeg(filename=fl, width=6, height=8, units="in", quality=100, res=300)
+    ggtitle(substitute(paste("Hourly P",  M[10], " Roses for ", d), 
+                       list(d=format(as.Date(day), "%m-%d-%Y"))), 
+            subtitle=substitute(paste("(Site Label = 24-hour P", M[10], ")"),  
+                       list(d=format(as.Date(day), "%m-%d-%Y")))) +
+    theme(plot.title=element_text(hjust=0.5),
+          plot.subtitle=element_text(hjust=0.5), 
+          panel.border=element_rect(color="black", fill="transparent"))
+fl <- paste0(path, "/", format(as.Date(day), "%m-%d-%Y"), "_shoreline.pdf")
+pdf(file=fl, width=8, height=10.5, paper="letter")
 print(p4)
 dev.off()
 return(fl)
